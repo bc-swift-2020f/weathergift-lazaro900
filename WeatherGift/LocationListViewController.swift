@@ -17,20 +17,18 @@ class LocationListViewController: UIViewController {
     
     
     var weatherLocations: [WeatherLocation] = []
+    var selectedLocationIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var weatherLocation = WeatherLocation(name: "Tampa", latitude: 0, longitude: 0)
-        weatherLocations.append(weatherLocation)
-        weatherLocation = WeatherLocation(name: "Boston", latitude: 1, longitude: 1)
-        weatherLocations.append(weatherLocation)
-        weatherLocation = WeatherLocation(name: "San Jose", latitude: 2, longitude: 2)
-        weatherLocations.append(weatherLocation)
-        
-
+    
         tableView.dataSource = self
         tableView.delegate = self
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        selectedLocationIndex = tableView.indexPathForSelectedRow!.row
     }
     
     func saveData() {
