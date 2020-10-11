@@ -22,18 +22,27 @@ class LocationListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-    
         tableView.dataSource = self
         tableView.delegate = self
+        
+        }
+    
+
+    
+    func saveLocations() {
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(weatherLocations) {
+            UserDefaults.standard.setValue(encoded, forKey: "weatherLocations")
+        } else {
+            print("Saving encoded did not work")
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         selectedLocationIndex = tableView.indexPathForSelectedRow!.row
+        saveLocations()
     }
     
-    func saveData() {
-
-    }
     
     //Actions
     @IBAction func editButtonPressed(_ sender: UIBarButtonItem) {
@@ -52,17 +61,6 @@ class LocationListViewController: UIViewController {
         let autocompleteController = GMSAutocompleteViewController()
             autocompleteController.delegate = self
 
-//            // Specify the place data types to return.
-//            let fields: GMSPlaceField = GMSPlaceField(rawValue: UInt(GMSPlaceField.name.rawValue) |
-//              UInt(GMSPlaceField.placeID.rawValue))!
-//            autocompleteController.placeFields = fields
-//
-//            // Specify a filter.
-//            let filter = GMSAutocompleteFilter()
-//            filter.type = .address
-//            autocompleteController.autocompleteFilter = filter
-
-            // Display the autocomplete view controller.
             present(autocompleteController, animated: true, completion: nil)
     }
     
@@ -85,7 +83,7 @@ extension LocationListViewController: UITableViewDataSource, UITableViewDelegate
         if editingStyle == .delete {
             weatherLocations.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            saveData()
+            saveLocations()
 
         }
     }
@@ -94,8 +92,7 @@ extension LocationListViewController: UITableViewDataSource, UITableViewDelegate
         let itemToMove = weatherLocations[sourceIndexPath.row]
         weatherLocations.remove(at: sourceIndexPath.row)
         weatherLocations.insert(itemToMove, at: destinationIndexPath.row)
-        saveData()
-
+        saveLocations()
     }
 }
 
@@ -122,15 +119,6 @@ extension LocationListViewController: GMSAutocompleteViewControllerDelegate {
   // User canceled the operation.
   func wasCancelled(_ viewController: GMSAutocompleteViewController) {
     dismiss(animated: true, completion: nil)
-  }
-
-  // Turn the network activity indicator on and off again.
-  func didRequestAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
-    UIApplication.shared.isNetworkActivityIndicatorVisible = true
-  }
-
-  func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
-    UIApplication.shared.isNetworkActivityIndicatorVisible = false
   }
 
 }
