@@ -181,7 +181,6 @@ class WeatherDetail: WeatherLocation {
                 self.timezone = result.timezone
                 self.description = result.current.weather[0].description
                 self.dt = result.current.dt
-                print(result)
                 self.temp = result.current.temp
                 self.image = result.current.weather[0].icon
                 for index in 0..<result.daily.count {
@@ -194,7 +193,6 @@ class WeatherDetail: WeatherLocation {
                     let dailyLow = Int(result.daily[index].temp.min.rounded())
                     let dailyWeather = DailyWeather(dailyIcon: dailyIcon1, dailyWeekday: dailyWeekday, dailySummary: dailySummary, dailyHigh: dailyHigh, dailyLow: dailyLow)
                     self.dailyWeatherData.append(dailyWeather)
-                    print("Day: \(dailyWeekday), High: \(dailyHigh), Low: \(dailyLow)")
                 }
                 
                 
@@ -205,7 +203,6 @@ class WeatherDetail: WeatherLocation {
                     let hourlyIcon = self.systemNameFromID(id: result.hourly[index].weather[0].id, icon: (result.hourly[index].weather[0].icon))
                     let hourlyTemperature = Int(result.hourly[index].temp.rounded())
                     let hourlWeather = HourlyWeather(hour: hour, hourlyTemperature: String(hourlyTemperature), hourlyIcon: hourlyIcon)
-                    print("Hour: \(hour), Temperature: \(hourlyTemperature), Icon: \(hourlyIcon)")
 
                     self.hourlyWeatherData.append(hourlWeather)
 

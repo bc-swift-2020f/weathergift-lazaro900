@@ -64,7 +64,20 @@ class LocationListViewController: UIViewController {
             present(autocompleteController, animated: true, completion: nil)
     }
     
+    // MARK: prevent an item from being moved in the view
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return (indexPath.row != 0 ? true : false)
+    }
 
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return (indexPath.row != 0 ? true : false)
+    }
+    
+    func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        return (proposedDestinationIndexPath.row == 0 ? sourceIndexPath : proposedDestinationIndexPath)
+    }
+    
 }
 
 extension LocationListViewController: UITableViewDataSource, UITableViewDelegate {
@@ -101,9 +114,6 @@ extension LocationListViewController: GMSAutocompleteViewControllerDelegate {
 
   // Handle the user's selection.
   func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
-    print("Place name: \(place.name)")
-    print("Place ID: \(place.placeID)")
-    print("Place attributions: \(place.attributions)")
     
     let newLocation = WeatherLocation(name: place.name ?? "unkown location ", latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
     weatherLocations.append(newLocation)

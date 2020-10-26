@@ -25,7 +25,7 @@ class PageViewController: UIPageViewController {
         guard let locationsEncoded = UserDefaults.standard.value(forKey: "weatherLocations") as? Data
         else {
             print("Could not load data")
-            weatherLocations.append(WeatherLocation(name: "Current Location", latitude: 0.0, longitude: 0.0))
+            weatherLocations.append(WeatherLocation(name: "", latitude: 0.0, longitude: 0.0))
         return
         }
         let decoder = JSONDecoder()
